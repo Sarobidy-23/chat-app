@@ -600,6 +600,18 @@ export interface UpdateUser {
      * @type {string}
      * @memberof UpdateUser
      */
+    'password'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUser
+     */
+    'oldPassword'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUser
+     */
     'bio'?: string;
 }
 /**

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 interface InputProps {
     type?: string,
@@ -7,12 +7,14 @@ interface InputProps {
     id: string
     complementProps?: any,
     error?: string | undefined
-    startItem?: any
+    startItem?: any,
+    value?: string,
+    disable?: boolean
 }
 
 export default function InputField(props: InputProps) {
-    const { id, type, placeholder, label, complementProps, error, startItem } = props
-
+    const { id, type, placeholder, label, complementProps, error, startItem, value, disable } = props
+    
   return (
     <div>
         <label htmlFor={id} className="block text-sm font-medium leading-6 text-gray-900">{label}</label>
@@ -24,9 +26,12 @@ export default function InputField(props: InputProps) {
                 name={label} 
                 type={type} 
                 autoComplete={type} 
+                value={value}
                 {...complementProps} 
                 placeholder={placeholder}
-                className={`pl-10 pr-10 block w-full rounded-md py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 ${error ? "focus:ring-red-500 ring-red-500":"focus:ring-indigo-600"} focus:outline-none`}/>
+                disabled={disable}
+                readOnly={disable}
+                className={`pl-10 pr-10 block w-full rounded-md ${disable && 'cursor-not-allowed'} py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 ${error ? "focus:ring-red-500 ring-red-500":"focus:ring-indigo-600"} focus:outline-none`}/>
         </div>
         <span className="flex items-center font-medium text-red-500 text-xs mt-1 ml-1">
 			{error}

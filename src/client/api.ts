@@ -1111,7 +1111,7 @@ export const MessageApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getByUserId(userId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<AllMessageResponse>>> {
+        async getByUserId(userId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AllMessageResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getByUserId(userId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -1149,7 +1149,7 @@ export const MessageApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getByUserId(userId: number, options?: any): AxiosPromise<Array<AllMessageResponse>> {
+        getByUserId(userId: number, options?: any): AxiosPromise<AllMessageResponse> {
             return localVarFp.getByUserId(userId, options).then((request) => request(axios, basePath));
         },
     };

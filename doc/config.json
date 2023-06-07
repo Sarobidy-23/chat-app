@@ -1,0 +1,20 @@
+{
+    "inputSpec": "api.yml",
+    "output": "generated-client",
+    "generatorName": "graphql-axios",
+    "configOptions": {
+      "useSingleRequestParameter": true,
+      "withQueryParameters": true,
+      "generateGetOperation": true,
+      "generatePostOperation": false,
+      "generatePutOperation": false,
+      "generatePatchOperation": false,
+      "generateDeleteOperation": false,
+      "generateHeadOperation": false,
+      "generateOptionsOperation": false,
+      "generateTraceOperation": false,
+      "generateMutationMethod": false,
+      "generateSubscriptionMethod": false
+    }
+  }
+  

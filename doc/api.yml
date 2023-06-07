@@ -1,0 +1,417 @@
+openapi: 3.0.3
+info:
+  version: '1.0'
+  title: chat-app
+
+servers:
+  - url: 'http://localhost:8080'
+
+security:
+  - BearerAuth : []
+
+paths:
+  /users/login:
+    post:
+      operationId: login
+      tags:
+        - "user"
+      
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/LoginInfo'
+      responses:
+        200:
+          description: All user
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/OneUserResponse'
+  /users:
+    get:
+      operationId: getAllUser
+      tags: 
+        - "user"
+      responses:
+        200:
+          description: All user
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/AllUserResponse'
+    post:
+      operationId: signup 
+      tags: 
+        - "user"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUser'
+      responses:
+        201:
+          description: All user
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/OneUserResponse'
+
+  /user:
+    get:
+      operationId: getCurrent
+      tags:
+        - "user"
+      responses:
+        200:
+          description: current user
+          content:
+            application/json:
+              schema: 
+                type: array
+                $ref: '#/components/schemas/OneUserResponse'
+      
+    put:
+      operationId: update 
+      tags:
+        - "user"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/UpdateUser'
+      responses:
+        200:
+          description: user
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  $ref: '#/components/schemas/OneUserResponse'
+
+  /channels:
+    get: 
+      operationId: getAll 
+      tags:
+        - "channel"
+      responses:
+        200: 
+          description: channel
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/AllChannelResponse'
+  /channel: 
+    post:
+      operationId: createChannel
+      tags:
+        - "channel"
+      requestBody:
+        required: true 
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateChannel'
+      responses:
+        200: 
+          description: channel
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/OneChannelResponse'
+
+  /channel/{channelId}: 
+    get:
+      operationId: getOne 
+      tags:
+        - "channel"
+      parameters:
+        - name: channelId
+          in: path
+          required: true
+          schema: 
+            type: integer
+      responses:
+        200: 
+          description: channel
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/OneChannelResponse'
+
+  /channels/{channelId}/members:
+    post:
+      operationId: addMember
+      tags:
+        - "channel"
+      parameters:
+        - name: channelId
+          in: path
+          required: true
+          schema: 
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: 
+              properties:
+                members:
+                  items:
+                    type: integer
+      responses:
+        201: 
+          description: channel
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/MemberAdded'
+
+  /message:
+    post:
+      operationId: createMessage 
+      tags:
+        - "message"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/CreateMessage'
+      responses:
+        200:
+          description: message 
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/OneMessageResponse'
+
+  /messages/channel/{channelId}: 
+    get:
+      operationId: getByChannelId
+      tags:
+        - "message"
+      parameters:
+        - name: channelId
+          in: path 
+          required: true
+          schema: 
+            type: integer
+      responses:
+        200: 
+          description: message in channel
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/AllMessageResponse'
+  /messages/{userId}: 
+   get:
+      operationId: getByUserId
+      tags:
+        - "message"
+      parameters:
+        - name: userId
+          in: path 
+          required: true
+          schema: 
+            type: integer
+      responses:
+        200: 
+          description: userMessage
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/AllMessageResponse'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+  schemas:
+    RequestStatus:
+      properties:
+        status:
+          type: boolean
+    OneUserResponse:
+      properties:
+        status:
+          $ref: '#/components/schemas/RequestStatus'
+        user:
+          $ref: '#/components/schemas/ActualUser'
+    AllUserResponse:
+      properties:
+        status:
+          $ref: '#/components/schemas/RequestStatus'
+        users:
+          items:
+            $ref: '#/components/schemas/User'
+    User:
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+        bio:
+          type: string
+    ActualUser: 
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+        googleId:
+          type: integer
+        bio:
+          type: string
+        status:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        deletedAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        token:
+          type: string
+    LoginInfo: 
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    CreateUser:
+      properties:
+        email:
+          type: string
+        name:
+          type: string
+        password:
+          type: string
+        bio:
+          type: string
+    UpdateUser:
+      properties:
+        name:
+          type: string
+        password:
+          type: string
+        oldPassword:
+          type: string
+        bio:
+          type: string
+    Channel:
+      properties:
+        id:
+          type: string
+        name: 
+          type: string
+        type:
+          type: string
+        ownerId: 
+          type: integer
+        updatedAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+    OneChannelResponse:
+      properties:
+        status:
+          $ref: '#/components/schemas/RequestStatus'
+        channel: 
+          $ref: '#/components/schemas/Channel'
+    AllChannelResponse:
+      properties:
+        status:
+          $ref: '#/components/schemas/RequestStatus'
+        channels: 
+          items:
+            $ref: '#/components/schemas/Channel'
+    CreateChannel:
+      properties:
+        name: 
+          type: string
+        type:
+          type: string
+        members:
+          type: array
+          items: 
+            type: integer
+    MemberAdded:
+      properties:
+        status:
+          $ref: '#/components/schemas/RequestStatus'
+        userAdded:
+          type: array
+          items:
+            type: integer
+    CreateMessage:
+      properties:
+        senderId:
+          type: integer
+        channelId:
+          type: integer
+        recipientId: 
+          type: integer
+        content:
+          type: string
+    OneMessageResponse:
+      properties:
+        status:
+          $ref: '#/components/schemas/RequestStatus'
+        message: 
+          allOf:
+            - $ref: '#/components/schemas/CreateMessage'
+            - type: object
+              properties:
+                id:
+                  type: integer
+                updatedAt:
+                  type: string
+                  format: date-time
+                createdAt:
+                  type: string
+                  format: date-time
+    AllMessageResponse:
+      properties:
+        status:
+          $ref: '#/components/schemas/RequestStatus'
+        messages:
+          items:
+            allOf:
+              - type: object
+                properties:
+                  id: 
+                    type: integer
+                  updatedAt:
+                    type: string
+                    format: date-time
+                  createdAt:
+                    type: string
+                    format: date-time
+                  sender: 
+                    $ref: '#/components/schemas/SenderMessage'
+              - $ref: '#/components/schemas/CreateMessage'
+    SenderMessage:
+      properties:
+        id: 
+          type: integer
+        name:
+          type: string
+        email: 
+          type: string

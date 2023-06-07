@@ -11,7 +11,6 @@ export function useChannel () {
         const client = new ChannelApi(conf)
         return client.getAll()
             .then((response) => response.data?.channels)
-            .catch((error) => error?.response?.data?.message)
     }
     const { data, error, isLoading, mutate } = useSWR("channelList", getAll, { revalidateIfStale: true, refreshWhenHidden: false })
     return {

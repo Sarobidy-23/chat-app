@@ -11,7 +11,6 @@ export function useActual () {
         const client = new UserApi(conf)
         return client.getCurrent()
             .then((response) => response.data.user)
-            .catch((error) => error?.response?.data?.message)
     }
     const { data, error, isLoading, mutate } = useSWR("actual", getActual, { revalidateIfStale: true, refreshWhenHidden: false })
     return {

@@ -46,11 +46,15 @@ export default function Sidebar(props: PropsWithChildren) {
                                 <>
                                     {channelList?.map((elt: Channel)=>(
                                         <div className='cursor-pointer dark:text-white p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg'
-                                            key={elt.id} 
-                                            onClick={()=>{router.push(`/channel/${elt.id}`)}}>
-                                                # {elt.name}
+                                            key={elt?.id} 
+                                            onClick={()=>{router.push(`/channel/${elt?.id}`)}}>
+                                                # {elt?.name}
                                         </div>
                                     ))}
+                                    <div className='cursor-pointer dark:text-white p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg'
+                                            onClick={()=>{router.push(`/channel/create`)}}>
+                                                + Create channel
+                                        </div>
                                 </>
                             }
                         />
@@ -67,9 +71,9 @@ export default function Sidebar(props: PropsWithChildren) {
                                 <>
                                     {userList?.map((elt: User)=>(
                                         <div className='cursor-pointer dark:text-white p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg'
-                                            key={elt.id} 
-                                            onClick={()=>{router.push(`/message/${elt.id}`)}}>
-                                                # {elt.name}
+                                            key={elt?.id} 
+                                            onClick={()=>{router.push(`/message/${elt?.id}`)}}>
+                                                # {elt?.name}
                                         </div>
                                     ))}
                                 </>

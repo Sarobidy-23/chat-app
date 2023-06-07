@@ -12,7 +12,6 @@ export function useUser () {
         const client = new UserApi(conf)
         return client.getAllUser()
             .then((response) => response.data?.users?.filter((user) => user.id != currentUserId))
-            .catch((error) => error?.response?.data?.message)
     }
     const { data, error, isLoading, mutate } = useSWR("userList", getAllUser, { revalidateIfStale: true, refreshWhenHidden: false })
     return {

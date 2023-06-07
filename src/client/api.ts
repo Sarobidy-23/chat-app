@@ -117,10 +117,10 @@ export interface AllChannelResponse {
     'status'?: RequestStatus;
     /**
      * 
-     * @type {Channel}
+     * @type {Array<Channel>}
      * @memberof AllChannelResponse
      */
-    'channels'?: Channel;
+    'channels'?: Array<Channel>;
 }
 /**
  * 
@@ -840,7 +840,7 @@ export const ChannelApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAll(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<AllChannelResponse>>> {
+        async getAll(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AllChannelResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getAll(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -888,7 +888,7 @@ export const ChannelApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAll(options?: any): AxiosPromise<Array<AllChannelResponse>> {
+        getAll(options?: any): AxiosPromise<AllChannelResponse> {
             return localVarFp.getAll(options).then((request) => request(axios, basePath));
         },
         /**
@@ -1208,7 +1208,7 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        geAll: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getAllUser: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/users`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1401,8 +1401,8 @@ export const UserApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async geAll(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AllUserResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.geAll(options);
+        async getAllUser(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AllUserResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllUser(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -1459,8 +1459,8 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        geAll(options?: any): AxiosPromise<AllUserResponse> {
-            return localVarFp.geAll(options).then((request) => request(axios, basePath));
+        getAllUser(options?: any): AxiosPromise<AllUserResponse> {
+            return localVarFp.getAllUser(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1513,8 +1513,8 @@ export class UserApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof UserApi
      */
-    public geAll(options?: AxiosRequestConfig) {
-        return UserApiFp(this.configuration).geAll(options).then((request) => request(this.axios, this.basePath));
+    public getAllUser(options?: AxiosRequestConfig) {
+        return UserApiFp(this.configuration).getAllUser(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

@@ -1,5 +1,5 @@
 import { getCookie } from 'cookies-next'
-import React, { useEffect, useState } from 'react'
+import React, { ReactElement, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup'
@@ -8,6 +8,8 @@ import { useActual } from '../../hooks/useActual';
 import InputField from '../../components/InputField';
 import { Configuration } from '../../client/configuration';
 import { toast } from 'react-toastify';
+import Sidebar from '@/components/Sidebar';
+import Accordion from '@/components/Accordion';
 
 const schema = yup.object({
     name: yup.string().required(),
@@ -17,7 +19,7 @@ const schema = yup.object({
     bio: yup.string().optional()
 })
 
-export default function index() {
+export default function Profile() {
     const form = useForm<UpdateUser & { confirmPassword: string}>({
         mode:'all',
         resolver: yupResolver(schema)
@@ -25,7 +27,7 @@ export default function index() {
 
     const { register, handleSubmit, formState:{ errors }, watch, setValue } = form
 
-    const { data } = useActual()
+    const { currentUser } = useActual()
 
     const login = async(data: UpdateUser) => {
         console.log(data)
@@ -41,22 +43,20 @@ export default function index() {
             toast(error?.response?.data?.message ?? "try again!")  
           });
     }
-    const [expanded, setExpanded] = useState(false)
-    const toggleExpanded = () => setExpanded((current) => !current)
     useEffect(()=> {
-        if(data){
-            setValue("name", data?.name,{
+        if(currentUser){
+            setValue("name", currentUser?.name,{
                 shouldValidate: true,
                 shouldDirty: true,
                 shouldTouch: true
             })
-            setValue("bio", data?.bio,{
+            setValue("bio", currentUser?.bio,{
                 shouldValidate: true,
                 shouldDirty: true,
                 shouldTouch: true
             })
         }
-    },[data])
+    },[currentUser])
 
   return (
     <div>
@@ -79,41 +79,45 @@ export default function index() {
                     id="email" 
                     label="Email"
                     disable={true}
-                    value={data?.email as string}/>
+                    value={currentUser?.email as string}/>
             </div>
             <div className='mt-6'>         
                 <label htmlFor="bio" className="block text-sm font-medium leading-6 text-gray-900">Bio</label>
                 <textarea id="bio" rows={4} className="p-2  block w-full rounded-md py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2" placeholder="Brief description of you..."
                     {...register('bio')}/>
             </div>
-            <div>
-                <div className="accordion-header cursor-pointer transition flex space-x-5 px-5 items-center h-16 select-none" onClick={toggleExpanded}>
-                    <h3>Edit password</h3>
-                    <svg data-accordion-icon className="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                </div>
-                <div className={`px-5 pt-0 overflow-hidden transition ${expanded ? "max-h-fit" : "max-h-0"}`}>
-                    <div className="mt-6">
-                        <InputField type="password" 
-                            id="oldPassword" 
-                            label="OldPassword"
-                            complementProps={{...register("oldPassword")}}/>
+            
+            <Accordion 
+                clickable={
+                    <div  className='mt-6 flex space-x-60'>
+                        <h3>Edit password</h3>
+                        <img src='/ArrowDown.svg' />
                     </div>
-                    <div className="mt-6">
-                        <InputField type="password" 
-                            id="password" 
-                            label="Password" 
-                            complementProps={{...register("password")}} 
-                            error={errors.password?.message}/>
-                    </div>
-                    <div className="mt-6">
-                        <InputField type="password" 
-                            id="confirmPassword" 
-                            label="ConfirmPassword" 
-                            complementProps={{...register("confirmPassword")}} 
-                            error={errors.confirmPassword?.message}/>
-                    </div>
-                </div>
-            </div>
+                }
+                details={
+                    <>
+                        <div className="mt-6">
+                            <InputField type="password" 
+                                id="oldPassword" 
+                                label="OldPassword"
+                                complementProps={{...register("oldPassword")}}/>
+                        </div>
+                        <div className="mt-6">
+                            <InputField type="password" 
+                                id="password" 
+                                label="Password" 
+                                complementProps={{...register("password")}} 
+                                error={errors.password?.message}/>
+                        </div>
+                        <div className="mt-6">
+                            <InputField type="password" 
+                                id="confirmPassword" 
+                                label="ConfirmPassword" 
+                                complementProps={{...register("confirmPassword")}} 
+                                error={errors.confirmPassword?.message}/>
+                        </div>
+                    </>
+                }/>
             <div className="mt-6">
                 <button
                     type="submit"
@@ -127,4 +131,14 @@ export default function index() {
     </div>
     </div>
   )
+}
+
+Profile.getLayout = function getLayout(page: ReactElement) {
+    return(
+        <main>
+            <Sidebar>
+                {page}
+            </Sidebar>
+        </main>
+    )
 }

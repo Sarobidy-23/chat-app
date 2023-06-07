@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Configuration } from "../../client/configuration";
 import InputField from "../../components/InputField";
 import * as yup from 'yup';
@@ -33,6 +33,7 @@ const Login = () => {
       .then((response) => {
         toast("login success")
         setCookie("chat-token", response.data.user?.token,{sameSite: 'lax'})
+        setCookie("chat-user-id", response.data.user?.id,{sameSite: 'lax'})
         router.push("/profile")
       })
       .catch((error) => {

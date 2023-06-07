@@ -34,6 +34,7 @@ export default function SignUp() {
           .then((response) => {
             toast("registration success")
             setCookie("chat-token", response.data.user?.token,{sameSite: 'lax'})
+            setCookie("chat-user-id", response.data.user?.id,{sameSite: 'lax'})
             router.push("/profile")
           })
           .catch((error) => {

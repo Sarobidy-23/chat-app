@@ -90,7 +90,7 @@ export default function Sidebar(props: PropsWithChildren) {
                 </ul>
             </div>
         </aside>
-        <div className="p-4 sm:ml-64">
+        <div className="pl-4 pr-4 sm:ml-64 max-h-screen relative">
             {children}
         </div>
     </div>

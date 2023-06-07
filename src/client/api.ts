@@ -13,15 +13,15 @@
  */
 
 
-import type { Configuration } from './configuration';
+import type { Configuration } from '../../doc/ok/configuration';
 import type { AxiosPromise, AxiosInstance, AxiosRequestConfig } from 'axios';
 import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from './common';
-import type { RequestArgs } from './base';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../../doc/ok/common';
+import type { RequestArgs } from '../../doc/ok/base';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError } from './base';
+import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError } from '../../doc/ok/base';
 
 /**
  * 
@@ -1101,7 +1101,7 @@ export const MessageApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getByChannelId(channelId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<AllMessageResponse>>> {
+        async getByChannelId(channelId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AllMessageResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getByChannelId(channelId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -1140,7 +1140,7 @@ export const MessageApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getByChannelId(channelId: number, options?: any): AxiosPromise<Array<AllMessageResponse>> {
+        getByChannelId(channelId: number, options?: any): AxiosPromise<AllMessageResponse> {
             return localVarFp.getByChannelId(channelId, options).then((request) => request(axios, basePath));
         },
         /**

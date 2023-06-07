@@ -26,15 +26,15 @@ export default function ChannelMessage(props: Props) {
         const client = new MessageApi(conf)
         return client
             .getByChannelId(parseInt(channelId.toString()))
-            .then((response) => response.data?.messages)
+            .then((response) => response.data?.messages?.reverse())
     }
-   const {data, mutate} = useSWR("channelMessage", getMessage, { revalidateIfStale: true, refreshWhenHidden: false, refreshInterval: 5000 })
+   const {data, mutate} = useSWR("channelMessage", getMessage, { revalidateIfStale: true, refreshWhenHidden: false, refreshInterval: 3000 })
      
     const form = useForm<CreateMessage>({
         mode:'all',
         resolver: yupResolver(schema)
     })
-    const { register, handleSubmit, formState:{ errors } } = form
+    const { register, handleSubmit, formState:{ errors }, reset } = form
 
     const sendMessage = async (data: CreateMessage) => {
         const conf = new Configuration()
@@ -43,12 +43,12 @@ export default function ChannelMessage(props: Props) {
         data.channelId = channelId
         client
             .createMessage(data)
-            .then((response) => mutate())
+            .then(() => {mutate(); reset()})
     }
   return (
     <main className="flex flex-col items-center justify-center w-full min-h-screen bg-gray-100 text-gray-800 p-5">
 	<div className="flex flex-col flex-grow w-full bg-white shadow-xl rounded-lg overflow-hidden">
-        <div className="bg-gray-200 p-4 flex items-center space-x-2 cursor-pointer w-24 rounded-lg justify-center"
+        <div className="bg-gray-100 p-2 flex items-center space-x-2 cursor-pointer w-24 rounded-lg justify-center"
             onClick={()=>router.push(`/channel/edit/${channelId}`)}>
             <span>Edit</span>
             <svg className="w-4 h-4 fill-current" viewBox="0 0 16 16">
@@ -56,21 +56,23 @@ export default function ChannelMessage(props: Props) {
             </svg>
         </div>
 		<div className="flex flex-col flex-grow h-0 p-4 overflow-auto">
-            {data?.reverse()?.map((message)=>{
-                return <DisplayMessage
+            {data?.reverse()?.map((message)=>(
+                <DisplayMessage
                     createdAt={message.createdAt?.toString() as string}
                     senderId={message.sender?.id?.toString() as string}
                     senderName={message.sender?.name?.toString() as string}
                     content={message.content?.toString() as string}
                     />
-})}
+            ))}
 		</div>
 		<form className="bg-gray-300 p-4 flex" name='sendMessageForm' onSubmit={handleSubmit(sendMessage)}>
 			<textarea className="flex items-center h-10 w-full rounded px-3 text-sm" 
                 rows={2} 
                 placeholder="Type your message…"
                 {...register('content')}/>
-            <button type='submit' className="w-10 h-10 transition duration-75 ml-6 mr-6"><img src='/send.svg'/></button>
+            <button type='submit' className="w-20 h-10 transition duration-75 ml-6 mr-6 hover:bg-gray-400 bg-gray-200 pl-5 pr-5 rounded-lg">
+                <img src='/send.svg'/>
+            </button>
 		</form>
 	</div>
 </main>

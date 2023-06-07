@@ -16,7 +16,7 @@ export default function DisplayMessage(props: Props) {
     useEffect(()=>{
         setInterval(()=>{
             setTime(format(new Date(createdAt)))
-        }, 5000)
+        }, 3000)
     },[])
   return (
     <div className={`flex w-full mt-2 space-x-3 max-w-xs ${currentUserId == senderId && "ml-auto justify-end"}`}>

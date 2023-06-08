@@ -12,15 +12,17 @@ import { useChannel } from '@/hooks/useChannel'
 import { getCookie } from 'cookies-next'
 
 const schema = yup.object({
-  name: yup.string().required(),
+  channelName: yup.string().required(),
   type: yup.string().oneOf(['public', 'private']),
   members: yup.array().of(yup.number())
 })
 
+type FormData = yup.InferType<typeof schema>;
+
 export default function Create() {
   const { mutate } = useChannel()
 
-  const form = useForm<CreateChannel>({
+  const form = useForm<FormData>({
     mode: 'all',
     resolver: yupResolver(schema),
     defaultValues: { members: [] }
@@ -35,13 +37,13 @@ export default function Create() {
 
   const { userList } = useUser()
 
-  const create = (data: CreateChannel) => {
+  const create = (data: FormData) => {
     const config = new Configuration()
     config.accessToken = getCookie('chat-token')?.toString()
     const client = new ChannelApi(config)
     client
-      .createChannel(data)
-      .then(response => {
+      .createChannel({name: data.channelName, type: data.type, members: data.members as number[]})
+      .then(() => {
         toast('create success')
         mutate()
       })
@@ -63,7 +65,12 @@ export default function Create() {
       </div>
       <div className='mt-10 sm:mx-auto sm:w-full sm:max-w-sm'>
         <form name='createChannelForm' onSubmit={handleSubmit(create)}>
-          <InputField type='text' id='name' label='Name' complementProps={{ ...register('name') }} error={errors.name?.message} />
+          <InputField 
+            type='text' 
+            id='name' 
+            label='Name' 
+            complementProps={{ ...register('channelName') }} 
+            error={errors.channelName?.message} />
           <div className='mt-6'>
             <label htmlFor='channelType' className='block text-sm font-medium leading-6 text-gray-900'>
               Type
@@ -72,10 +79,9 @@ export default function Create() {
               id='channelType'
               className='cursor-pointer mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500'
               {...register('type')}
+              defaultValue="public"
             >
-              <option selected value='public'>
-                Public
-              </option>
+              <option selected value='public'>Public</option>
               <option value='private'>Private</option>
             </select>
           </div>
@@ -105,9 +111,9 @@ export default function Create() {
           <div className='mt-6'>
             <button
               type='submit'
-              className='flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
+              className='createChannelButton flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
             >
-              Create
+              Create Channel
             </button>
           </div>
         </form>

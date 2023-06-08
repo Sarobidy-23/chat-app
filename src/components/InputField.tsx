@@ -24,7 +24,6 @@ export default function InputField(props: InputProps) {
         <div className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none'>{startItem}</div>
         <input
           id={id}
-          name={label}
           type={type}
           autoComplete={type}
           value={value}

@@ -3,7 +3,7 @@ import React, { ReactElement, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { UpdateUser, UserApi, Configuration } from '@/client'
+import { UserApi, Configuration } from '@/client'
 import { useActual } from '@/hooks/useActual'
 import InputField from '@/components/InputField'
 import { toast } from 'react-toastify'
@@ -12,14 +12,17 @@ import Accordion from '@/components/Accordion'
 
 const schema = yup.object({
   name: yup.string().required(),
-  oldPassword: yup.string(),
-  password: yup.string(),
-  confirmPassword: yup.string().oneOf([yup.ref('password')], 'confirmPassword is equal password'),
+  currentPassword: yup.string(),
+  newPassword: yup.string(),
+  confirmPassword: yup.string().oneOf([yup.ref('currentPassword')], 'confirmPassword is equal currentPassword'),
+  email: yup.string(),
   bio: yup.string().optional()
 })
 
+type FormData = yup.InferType<typeof schema>;
+
 export default function Profile() {
-  const form = useForm<UpdateUser & { confirmPassword: string }>({
+  const form = useForm<FormData>({
     mode: 'all',
     resolver: yupResolver(schema)
   })
@@ -33,8 +36,7 @@ export default function Profile() {
 
   const { currentUser } = useActual()
 
-  const login = async (data: UpdateUser) => {
-    console.log(data)
+  const update = async (data: FormData) => {
     const config = new Configuration()
     config.accessToken = getCookie('chat-token')?.toString()
     const client = new UserApi(config)
@@ -46,7 +48,7 @@ export default function Profile() {
 
   useEffect(() => {
     if (currentUser) {
-      setValue('name', currentUser?.name, {
+      setValue('name', currentUser?.name as string, {
         shouldValidate: true,
         shouldDirty: true,
         shouldTouch: true
@@ -66,10 +68,22 @@ export default function Profile() {
           <h2 className='mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900'>Your user profile</h2>
         </div>
         <div className='mt-10 sm:mx-auto sm:w-full sm:max-w-sm'>
-          <form name='editProfileForm' onSubmit={handleSubmit(login)}>
-            <InputField type='name' id='name' label='Name' complementProps={{ ...register('name') }} value={watch('name')} error={errors.name?.message} />
+          <form name='editProfileForm' onSubmit={handleSubmit(update)}>
+            <InputField 
+                type='name' 
+                id='name' 
+                label='Name' 
+                complementProps={{ ...register('name') }} 
+                value={watch('name')} 
+                error={errors.name?.message} />
             <div className='mt-6'>
-              <InputField type='email' id='email' label='Email' disable={true} value={currentUser?.email as string} />
+              <InputField 
+                id='email' 
+                type='email' 
+                label='Email'
+                {...register('email')}
+                disable
+                value={currentUser?.email as string} />
             </div>
             <div className='mt-6'>
               <label htmlFor='bio' className='block text-sm font-medium leading-6 text-gray-900'>
@@ -81,6 +95,7 @@ export default function Profile() {
                 className='p-2  block w-full rounded-md py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2'
                 placeholder='Brief description of you...'
                 {...register('bio')}
+                value={watch('bio')}
               />
             </div>
             <Accordion
@@ -93,15 +108,25 @@ export default function Profile() {
               details={
                 <>
                   <div className='mt-6'>
-                    <InputField type='password' id='oldPassword' label='OldPassword' complementProps={{ ...register('oldPassword') }} />
+                    <InputField 
+                        id='currentPassword' 
+                        type='password' 
+                        label='currentPassword' 
+                        complementProps={{ ...register('currentPassword') }} 
+                        error={errors.currentPassword?.message}  />
                   </div>
                   <div className='mt-6'>
-                    <InputField type='password' id='password' label='Password' complementProps={{ ...register('password') }} error={errors.password?.message} />
+                    <InputField 
+                        id='newPassword' 
+                        type='password'
+                        label='newPassword' 
+                        complementProps={{ ...register('newPassword') }} 
+                        error={errors.newPassword?.message} />
                   </div>
                   <div className='mt-6'>
                     <InputField
-                      type='password'
                       id='confirmPassword'
+                      type='password'
                       label='ConfirmPassword'
                       complementProps={{ ...register('confirmPassword') }}
                       error={errors.confirmPassword?.message}
@@ -113,9 +138,9 @@ export default function Profile() {
             <div className='mt-6'>
               <button
                 type='submit'
-                className='flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
+                className='updateProfileButton flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
               >
-                Update information
+               Update Profile
               </button>
             </div>
           </form>

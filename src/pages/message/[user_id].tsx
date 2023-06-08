@@ -2,7 +2,7 @@ import DisplayMessage from '@/components/DisplayMessage'
 import Sidebar from '@/components/Sidebar'
 import React, { ReactElement } from 'react'
 import * as yup from 'yup'
-import { Configuration, CreateMessage, MessageApi } from '@/client'
+import { Configuration, MessageApi } from '@/client'
 import { getCookie } from 'cookies-next'
 import useSWR from 'swr'
 import { useForm } from 'react-hook-form'
@@ -12,8 +12,10 @@ interface Props {
   userId: number
 }
 const schema = yup.object({
-  content: yup.string().required()
+  message: yup.string().required()
 })
+
+type FormData = yup.InferType<typeof schema>;
 
 export default function UserMessage(props: Props) {
   const { userId } = props
@@ -31,18 +33,17 @@ export default function UserMessage(props: Props) {
     revalidateOnMount: true
   })
 
-  const form = useForm<CreateMessage>({
+  const form = useForm<FormData>({
     mode: 'all',
     resolver: yupResolver(schema)
   })
   const { register, handleSubmit, reset } = form
 
-  const sendMessage = async (data: CreateMessage) => {
+  const sendMessage = async (data: FormData) => {
     const conf = new Configuration()
     conf.accessToken = getCookie('chat-token')?.toString()
     const client = new MessageApi(conf)
-    data.recipientId = userId
-    client.createMessage(data).then(() => {
+    client.createMessage({content: data.message, recipientId: userId}).then(() => {
       mutate()
       reset()
     })
@@ -62,9 +63,15 @@ export default function UserMessage(props: Props) {
           ))}
         </div>
         <form className='bg-gray-300 p-4 flex' name='sendMessageForm' onSubmit={handleSubmit(sendMessage)}>
-          <textarea className='flex items-center h-10 w-full rounded px-3 text-sm' rows={2} placeholder='Type your message…' {...register('content')} />
-          <button type='submit' className='w-20 h-10 transition duration-75 ml-6 mr-6 hover:bg-gray-400 bg-gray-200 pl-5 pr-5 rounded-lg'>
-            <img src='/send.svg' />
+          <textarea 
+            className='flex items-center h-20 w-full rounded px-3 text-sm' 
+            rows={4} 
+            placeholder='Type your message…' 
+            {...register('message')} />
+          <button 
+            type='submit' 
+            className='sendMessageButton w-50 h-20 transition duration-75 ml-6 mr-6 hover:bg-gray-400 bg-gray-200 pl-5 pr-5 rounded-lg'>
+            Send Message
           </button>
         </form>
       </div>

@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useRouter } from 'next/router'
 import * as yup from 'yup'
-import { CreateUser, UserApi, Configuration } from '@/client'
+import { UserApi, Configuration } from '@/client'
 import { toast } from 'react-toastify'
 import { setCookie } from 'cookies-next'
 
@@ -16,8 +16,10 @@ const schema = yup.object({
   confirmPassword: yup.string().oneOf([yup.ref('password')], 'confirmPassword is equal password')
 })
 
+type FormData = yup.InferType<typeof schema>;
+
 export default function SignUp() {
-  const form = useForm<CreateUser & { confirmPassword: string }>({
+  const form = useForm<FormData>({
     mode: 'all',
     resolver: yupResolver(schema)
   })
@@ -29,7 +31,7 @@ export default function SignUp() {
 
   const router = useRouter()
 
-  const signUp = async (data: CreateUser) => {
+  const signUp = async (data: FormData) => {
     const config = new Configuration()
     const client = new UserApi(config)
     client
@@ -50,12 +52,27 @@ export default function SignUp() {
       </div>
       <div className='mt-10 sm:mx-auto sm:w-full sm:max-w-sm'>
         <form name='registrationForm' onSubmit={handleSubmit(signUp)}>
-          <InputField type='name' id='name' label='Name' complementProps={{ ...register('name') }} error={errors.name?.message} />
+          <InputField 
+            type='name' 
+            id='name' 
+            label='Name' 
+            complementProps={{ ...register('name') }}
+             error={errors.name?.message} />
           <div className='mt-6'>
-            <InputField type='email' id='email' label='Email' complementProps={{ ...register('email') }} error={errors.email?.message} />
+            <InputField 
+              type='email' 
+              id='email' 
+              label='Email' 
+              complementProps={{ ...register('email') }} 
+              error={errors.email?.message} />
           </div>
           <div className='mt-6'>
-            <InputField type='password' id='password' label='Password' complementProps={{ ...register('password') }} error={errors.password?.message} />
+            <InputField 
+              type='password' 
+              id='password' 
+              label='Password' 
+              complementProps={{ ...register('password') }} 
+              error={errors.password?.message} />
           </div>
           <div className='mt-6'>
             <InputField
@@ -69,9 +86,9 @@ export default function SignUp() {
           <div className='mt-6'>
             <button
               type='submit'
-              className='flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
+              className='registerButton  flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
             >
-              Sign up
+              Register
             </button>
           </div>
         </form>

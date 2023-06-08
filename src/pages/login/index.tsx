@@ -50,16 +50,26 @@ const Login = () => {
       </div>
       <div className='mt-10 sm:mx-auto sm:w-full sm:max-w-sm'>
         <form name='loginForm' onSubmit={handleSubmit(login)}>
-          <InputField type='email' id='email' label='email' complementProps={{ ...register('email') }} error={errors.email?.message} />
+          <InputField 
+            type='email' 
+            id='email' 
+            label='email' 
+            complementProps={{ ...register('email') }} 
+            error={errors.email?.message} />
           <div className='mt-6'>
-            <InputField type='password' id='password' label='Password' complementProps={{ ...register('password') }} error={errors.password?.message} />
+            <InputField 
+              type='password' 
+              id='password' 
+              label='Password' 
+              complementProps={{ ...register('password') }} 
+              error={errors.password?.message} />
           </div>
           <div className='mt-6'>
             <button
               type='submit'
-              className='flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
+              className='loginButton flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
             >
-              Sign in
+              Login
             </button>
           </div>
         </form>

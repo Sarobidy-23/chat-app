@@ -16,7 +16,7 @@ const schema = yup.object({
   message: yup.string().required()
 })
 
-type FormData = yup.InferType<typeof schema>;
+type FormData = yup.InferType<typeof schema>
 
 export default function ChannelMessage(props: Props) {
   const { channelId } = props
@@ -48,17 +48,13 @@ export default function ChannelMessage(props: Props) {
     mode: 'all',
     resolver: yupResolver(schema)
   })
-  const {
-    register,
-    handleSubmit,
-    reset
-  } = form
+  const { register, handleSubmit, reset } = form
 
   const sendMessage = async (data: FormData) => {
     const conf = new Configuration()
     conf.accessToken = getCookie('chat-token')?.toString()
     const client = new MessageApi(conf)
-    client.createMessage({content: data.message, channelId}).then(() => {
+    client.createMessage({ content: data.message, channelId }).then(() => {
       mutate()
       reset()
     })
@@ -91,14 +87,8 @@ export default function ChannelMessage(props: Props) {
           ))}
         </div>
         <form className='bg-gray-300 p-4 flex' name='sendMessageForm' onSubmit={handleSubmit(sendMessage)}>
-          <textarea 
-            className='flex items-center h-20 w-full rounded px-3 text-sm' 
-            rows={4} 
-            placeholder='Type your message…' 
-            {...register('message')} />
-          <button 
-            type='submit' 
-            className='sendMessageButton w-50 h-20 transition duration-75 ml-6 mr-6 hover:bg-gray-400 bg-gray-200 pl-5 pr-5 rounded-lg'>
+          <textarea className='flex items-center h-20 w-full rounded px-3 text-sm' rows={4} placeholder='Type your message…' {...register('message')} />
+          <button type='submit' className='sendMessageButton w-50 h-20 transition duration-75 ml-6 mr-6 hover:bg-gray-400 bg-gray-200 pl-5 pr-5 rounded-lg'>
             Send Message
           </button>
         </form>

@@ -51,19 +51,9 @@ const Login = () => {
       </div>
       <div className='mt-10 sm:mx-auto sm:w-full sm:max-w-sm'>
         <form name='loginForm' onSubmit={handleSubmit(login)}>
-          <InputField 
-            type='email' 
-            id='email' 
-            label='email' 
-            complementProps={{ ...register('email') }} 
-            error={errors.email?.message} />
+          <InputField type='email' id='email' label='email' complementProps={{ ...register('email') }} error={errors.email?.message} />
           <div className='mt-6'>
-            <InputField 
-              type='password' 
-              id='password' 
-              label='Password' 
-              complementProps={{ ...register('password') }} 
-              error={errors.password?.message} />
+            <InputField type='password' id='password' label='Password' complementProps={{ ...register('password') }} error={errors.password?.message} />
           </div>
           <div className='mt-6'>
             <button

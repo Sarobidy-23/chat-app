@@ -17,7 +17,7 @@ const schema = yup.object({
   confirmPassword: yup.string().oneOf([yup.ref('password')], 'confirmPassword is equal password')
 })
 
-type FormData = yup.InferType<typeof schema>;
+type FormData = yup.InferType<typeof schema>
 
 export default function SignUp() {
   const form = useForm<FormData>({
@@ -53,27 +53,12 @@ export default function SignUp() {
       </div>
       <div className='mt-10 sm:mx-auto sm:w-full sm:max-w-sm'>
         <form name='registrationForm' onSubmit={handleSubmit(signUp)}>
-          <InputField 
-            type='name' 
-            id='name' 
-            label='Name' 
-            complementProps={{ ...register('name') }}
-             error={errors.name?.message} />
+          <InputField type='name' id='name' label='Name' complementProps={{ ...register('name') }} error={errors.name?.message} />
           <div className='mt-6'>
-            <InputField 
-              type='email' 
-              id='email' 
-              label='Email' 
-              complementProps={{ ...register('email') }} 
-              error={errors.email?.message} />
+            <InputField type='email' id='email' label='Email' complementProps={{ ...register('email') }} error={errors.email?.message} />
           </div>
           <div className='mt-6'>
-            <InputField 
-              type='password' 
-              id='password' 
-              label='Password' 
-              complementProps={{ ...register('password') }} 
-              error={errors.password?.message} />
+            <InputField type='password' id='password' label='Password' complementProps={{ ...register('password') }} error={errors.password?.message} />
           </div>
           <div className='mt-6'>
             <InputField

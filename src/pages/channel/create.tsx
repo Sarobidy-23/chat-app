@@ -17,7 +17,7 @@ const schema = yup.object({
   members: yup.array().of(yup.number())
 })
 
-type FormData = yup.InferType<typeof schema>;
+type FormData = yup.InferType<typeof schema>
 
 export default function Create() {
   const { mutate } = useChannel()
@@ -42,7 +42,7 @@ export default function Create() {
     config.accessToken = getCookie('chat-token')?.toString()
     const client = new ChannelApi(config)
     client
-      .createChannel({name: data.channelName, type: data.type, members: data.members as number[]})
+      .createChannel({ name: data.channelName, type: data.type, members: data.members as number[] })
       .then(() => {
         toast('create success')
         mutate()
@@ -65,12 +65,7 @@ export default function Create() {
       </div>
       <div className='mt-10 sm:mx-auto sm:w-full sm:max-w-sm'>
         <form name='createChannelForm' onSubmit={handleSubmit(create)}>
-          <InputField 
-            type='text' 
-            id='name' 
-            label='Name' 
-            complementProps={{ ...register('channelName') }} 
-            error={errors.channelName?.message} />
+          <InputField type='text' id='name' label='Name' complementProps={{ ...register('channelName') }} error={errors.channelName?.message} />
           <div className='mt-6'>
             <label htmlFor='channelType' className='block text-sm font-medium leading-6 text-gray-900'>
               Type
@@ -79,9 +74,11 @@ export default function Create() {
               id='channelType'
               className='cursor-pointer mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500'
               {...register('type')}
-              defaultValue="public"
+              defaultValue='public'
             >
-              <option selected value='public'>Public</option>
+              <option selected value='public'>
+                Public
+              </option>
               <option value='private'>Private</option>
             </select>
           </div>

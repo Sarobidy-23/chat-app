@@ -15,12 +15,12 @@ const schema = yup.object({
   name: yup.string().required(),
   currentPassword: yup.string(),
   newPassword: yup.string(),
-  confirmPassword: yup.string().oneOf([yup.ref('currentPassword')], 'confirmPassword is equal currentPassword'),
+  confirmPassword: yup.string().oneOf([yup.ref('newPassword')], 'confirmPassword is equal newPassword'),
   email: yup.string(),
   bio: yup.string().optional()
 })
 
-type FormData = yup.InferType<typeof schema>;
+type FormData = yup.InferType<typeof schema>
 
 export default function Profile() {
   const form = useForm<FormData>({
@@ -42,7 +42,7 @@ export default function Profile() {
     config.accessToken = getCookie('chat-token')?.toString()
     const client = new UserApi(config)
     client
-      .update(data)
+      .update({name: data.name, bio: data.bio, oldPassword: data.currentPassword, password: data.newPassword})
       .then(() => toast('update success'))
       .catch(error => toast(error?.response?.data?.message ?? 'try again!'))
   }
@@ -70,21 +70,9 @@ export default function Profile() {
         </div>
         <div className='mt-10 sm:mx-auto sm:w-full sm:max-w-sm'>
           <form name='editProfileForm' onSubmit={handleSubmit(update)}>
-            <InputField 
-                type='name' 
-                id='name' 
-                label='Name' 
-                complementProps={{ ...register('name') }} 
-                value={watch('name')} 
-                error={errors.name?.message} />
+            <InputField type='name' id='name' label='Name' complementProps={{ ...register('name') }} value={watch('name')} error={errors.name?.message} />
             <div className='mt-6'>
-              <InputField 
-                id='email' 
-                type='email' 
-                label='Email'
-                {...register('email')}
-                disable
-                value={currentUser?.email as string} />
+              <InputField id='email' type='email' label='Email' {...register('email')} disable value={currentUser?.email as string} />
             </div>
             <div className='mt-6'>
               <label htmlFor='bio' className='block text-sm font-medium leading-6 text-gray-900'>
@@ -103,26 +91,28 @@ export default function Profile() {
               clickable={
                 <div className='mt-6 flex space-x-60'>
                   <h3>Edit password</h3>
-                  <Image src='/ArrowDown.svg' alt=''/>
+                  <img src='/ArrowDown.svg' alt='' />
                 </div>
               }
               details={
                 <>
                   <div className='mt-6'>
-                    <InputField 
-                        id='currentPassword' 
-                        type='password' 
-                        label='currentPassword' 
-                        complementProps={{ ...register('currentPassword') }} 
-                        error={errors.currentPassword?.message}  />
+                    <InputField
+                      id='currentPassword'
+                      type='password'
+                      label='currentPassword'
+                      complementProps={{ ...register('currentPassword') }}
+                      error={errors.currentPassword?.message}
+                    />
                   </div>
                   <div className='mt-6'>
-                    <InputField 
-                        id='newPassword' 
-                        type='password'
-                        label='newPassword' 
-                        complementProps={{ ...register('newPassword') }} 
-                        error={errors.newPassword?.message} />
+                    <InputField
+                      id='newPassword'
+                      type='password'
+                      label='newPassword'
+                      complementProps={{ ...register('newPassword') }}
+                      error={errors.newPassword?.message}
+                    />
                   </div>
                   <div className='mt-6'>
                     <InputField
@@ -141,7 +131,7 @@ export default function Profile() {
                 type='submit'
                 className='updateProfileButton flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
               >
-               Update Profile
+                Update Profile
               </button>
             </div>
           </form>

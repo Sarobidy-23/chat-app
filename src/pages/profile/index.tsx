@@ -9,6 +9,7 @@ import InputField from '@/components/InputField'
 import { toast } from 'react-toastify'
 import Sidebar from '@/components/Sidebar'
 import Accordion from '@/components/Accordion'
+import Image from 'next/image'
 
 const schema = yup.object({
   name: yup.string().required(),
@@ -102,7 +103,7 @@ export default function Profile() {
               clickable={
                 <div className='mt-6 flex space-x-60'>
                   <h3>Edit password</h3>
-                  <img src='/ArrowDown.svg' />
+                  <Image src='/ArrowDown.svg' alt=''/>
                 </div>
               }
               details={

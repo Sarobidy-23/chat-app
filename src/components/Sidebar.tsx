@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 import { useUser } from '@/hooks/useUser'
 import { deleteCookie } from 'cookies-next'
 import { toast } from 'react-toastify'
+import Image from 'next/image'
 
 export default function Sidebar(props: PropsWithChildren) {
   const { children } = props
@@ -35,7 +36,7 @@ export default function Sidebar(props: PropsWithChildren) {
                 onClick={() => router.push('/profile')}
               >
                 <span className='flex items-center justify-center w-10 h-10 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500'>
-                  <img src='/User.svg' className='w-6 h-6  transition duration-75 ' />
+                  <Image src='/User.svg' className='w-6 h-6  transition duration-75 ' alt=''/>
                 </span>
                 <span className='flex-1 ml-3 whitespace-nowrap'>Profile</span>
               </section>
@@ -44,7 +45,7 @@ export default function Sidebar(props: PropsWithChildren) {
               <Accordion
                 clickable={
                   <section className='flex w-full items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700'>
-                    <img src='/Inbox.svg' className='w-6 h-6  transition duration-75 ' />
+                    <Image src='/Inbox.svg' className='w-6 h-6  transition duration-75 ' alt=''/>
                     <span className='flex-1 ml-3 whitespace-nowrap'>Channel</span>
                   </section>
                 }
@@ -77,7 +78,7 @@ export default function Sidebar(props: PropsWithChildren) {
               <Accordion
                 clickable={
                   <section className='flex w-full items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700'>
-                    <img src='/User.svg' className='w-6 h-6  transition duration-75 ' />
+                    <Image src='/User.svg' className='w-6 h-6  transition duration-75 ' alt=''/>
                     <span className='flex-1 ml-3 whitespace-nowrap'>Users</span>
                   </section>
                 }
@@ -104,7 +105,7 @@ export default function Sidebar(props: PropsWithChildren) {
                 onClick={() => logout()}
               >
                 <button className='logoutButton flex'>
-                  <img src='/Logout.svg' className='w-6 h-6  transition duration-75 ' />
+                  <Image src='/Logout.svg' className='w-6 h-6  transition duration-75 ' alt=''/>
                   <span className='flex-1 ml-3 whitespace-nowrap'>Logout</span>
                 </button>
               </section>

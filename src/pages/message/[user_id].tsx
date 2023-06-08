@@ -55,6 +55,7 @@ export default function UserMessage(props: Props) {
         <div className='flex flex-col flex-grow h-0 p-4 overflow-auto'>
           {data?.reverse()?.map(message => (
             <DisplayMessage
+              key={message.id}
               createdAt={message.createdAt?.toString() as string}
               senderId={message.sender?.id?.toString() as string}
               senderName={message.sender?.name?.toString() as string}

@@ -7,6 +7,7 @@ import { LoginInfo, UserApi, Configuration } from '@/client'
 import { useRouter } from 'next/router'
 import { setCookie } from 'cookies-next'
 import { toast } from 'react-toastify'
+import Link from 'next/link'
 
 const schema = yup.object({
   email: yup.string().email().required(),
@@ -75,9 +76,9 @@ const Login = () => {
         </form>
         <p className='mt-10 text-center text-sm text-gray-500'>
           You are new?
-          <a href='/sign-up' className='font-semibold leading-6 text-teal-600 hover:text-teal-500'>
+          <Link href='/sign-up' className='font-semibold leading-6 text-teal-600 hover:text-teal-500'>
             Register now
-          </a>
+          </Link>
         </p>
       </div>
     </div>
